@@ -1,0 +1,404 @@
+:root {
+  color-scheme: dark;
+  --glow-x: 68%;
+  --glow-y: 24%;
+  --screen-brightness: 1;
+  --curve-x: 50%;
+  --curve-y: 50%;
+  --curve-rotate-x: 0deg;
+  --curve-rotate-y: 0deg;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  min-height: 100%;
+  margin: 0;
+  background: #010703;
+}
+
+body {
+  min-height: 100vh;
+  min-height: 100dvh;
+  overflow: hidden;
+  font-family: "Segoe UI", Arial, sans-serif;
+}
+
+.crt-screen {
+  position: fixed;
+  inset: -3vmax;
+  overflow: hidden;
+  isolation: isolate;
+  background:
+    radial-gradient(ellipse at var(--glow-x) var(--glow-y), rgba(178, 255, 165, 0.58), rgba(76, 226, 94, 0.18) 9%, transparent 28%),
+    radial-gradient(ellipse at 50% 45%, rgba(7, 118, 43, 0.95), rgba(1, 26, 9, 0.98) 70%, #000301 100%),
+    #011006;
+  filter: brightness(var(--screen-brightness)) saturate(1.08);
+  transform:
+    perspective(900px)
+    rotateX(var(--curve-rotate-x))
+    rotateY(var(--curve-rotate-y));
+  transform-origin: center;
+  animation: phosphor-flicker 4.4s linear infinite;
+}
+
+.crt-screen::before,
+.crt-screen::after,
+.screen-glow,
+.glass-sheen,
+.electron-sweep,
+.scanlines,
+.screen-vignette {
+  position: absolute;
+  inset: 0;
+  content: "";
+  pointer-events: none;
+}
+
+.crt-screen::before {
+  z-index: 1;
+  background:
+    radial-gradient(ellipse at 50% 50%, transparent 58%, rgba(0, 0, 0, 0.54) 82%, rgba(0, 0, 0, 0.88) 100%),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.58), transparent 12% 88%, rgba(0, 0, 0, 0.62)),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.62), transparent 14% 84%, rgba(0, 0, 0, 0.74));
+  box-shadow:
+    inset 0 0 4.5rem rgba(0, 0, 0, 0.86),
+    inset 0 0 11rem rgba(0, 0, 0, 0.56);
+}
+
+.crt-screen::after {
+  z-index: 6;
+  opacity: 0.33;
+  background:
+    radial-gradient(ellipse at 50% -16%, rgba(213, 255, 196, 0.2), transparent 38%),
+    linear-gradient(180deg, rgba(229, 255, 219, 0.07), transparent 18% 100%);
+  mix-blend-mode: screen;
+}
+
+.screen-glow {
+  z-index: 2;
+  background:
+    radial-gradient(ellipse at 50% 50%, rgba(28, 255, 92, 0.16), transparent 58%),
+    radial-gradient(ellipse at 20% 78%, rgba(123, 255, 90, 0.08), transparent 34%);
+  mix-blend-mode: screen;
+  animation: glow-pulse 5.6s ease-in-out infinite;
+}
+
+.glass-sheen {
+  z-index: 7;
+  opacity: 0.58;
+  background:
+    radial-gradient(ellipse at calc(var(--glow-x) + 1%) calc(var(--glow-y) - 2%), rgba(239, 255, 231, 0.45), rgba(170, 255, 164, 0.13) 8%, transparent 23%),
+    linear-gradient(108deg, transparent 7%, rgba(255, 255, 255, 0.07) 18%, transparent 32% 100%);
+  filter: blur(1.2px);
+  mix-blend-mode: screen;
+  animation: sheen-drift 8s ease-in-out infinite;
+}
+
+.electron-sweep {
+  z-index: 5;
+  opacity: 0.34;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    transparent 44%,
+    rgba(151, 255, 149, 0.2) 48%,
+    rgba(151, 255, 149, 0.04) 50%,
+    transparent 54%,
+    transparent 100%
+  );
+  mix-blend-mode: screen;
+  animation: vertical-hold 5.2s linear infinite;
+}
+
+.scanlines {
+  z-index: 4;
+  opacity: 0.5;
+  background:
+    repeating-linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0.58) 0,
+      rgba(0, 0, 0, 0.58) 1px,
+      rgba(93, 255, 113, 0.08) 2px,
+      rgba(93, 255, 113, 0.08) 3px,
+      transparent 4px,
+      transparent 6px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.028) 0,
+      rgba(255, 255, 255, 0.028) 1px,
+      transparent 1px,
+      transparent 4px
+    );
+  background-size: 100% 6px, 4px 100%;
+  mix-blend-mode: multiply;
+  animation: scanline-crawl 1.2s steps(8) infinite;
+}
+
+.screen-vignette {
+  z-index: 8;
+  background:
+    radial-gradient(ellipse at center, transparent 53%, rgba(0, 0, 0, 0.44) 76%, rgba(0, 0, 0, 0.78) 100%),
+    radial-gradient(ellipse at 50% 50%, rgba(255, 255, 255, 0.035), transparent 36%);
+  box-shadow:
+    inset 0 0 2.6rem rgba(0, 0, 0, 0.94),
+    inset 0 0 0.8rem rgba(137, 255, 132, 0.13);
+}
+
+.terminal {
+  position: absolute;
+  z-index: 3;
+  inset: 3vmax;
+  padding: clamp(1.35rem, 4.8vw, 3.2rem) clamp(1rem, 4.8vw, 3.6rem);
+  color: #6dff76;
+  font-family: "Lucida Console", "Courier New", monospace;
+  font-size: clamp(0.82rem, 1.95vw, 1.45rem);
+  font-weight: 700;
+  line-height: 1.55;
+  letter-spacing: 0;
+  text-shadow:
+    0 0 0.18rem rgba(125, 255, 128, 0.9),
+    0 0 0.65rem rgba(61, 255, 83, 0.58),
+    0.08rem 0 0 rgba(190, 255, 190, 0.18);
+}
+
+.terminal-output {
+  width: min(46rem, 91vw);
+  max-width: calc(100vw - clamp(2rem, 9vw, 7.2rem));
+}
+
+.terminal-line {
+  min-height: 1.55em;
+  white-space: pre-wrap;
+}
+
+.terminal-line.center {
+  text-align: center;
+}
+
+.terminal-line.tight {
+  min-height: 1.24em;
+  line-height: 1.24;
+}
+
+.terminal-line.spacer {
+  min-height: 0.62em;
+}
+
+.terminal-line.title {
+  display: block;
+  width: fit-content;
+  min-height: 1.42em;
+  padding-right: 2.2em;
+  border-bottom: 0.12em solid rgba(109, 255, 118, 0.84);
+}
+
+.terminal-link {
+  color: inherit;
+  text-decoration: none;
+  text-shadow: inherit;
+  outline: none;
+}
+
+.terminal-link:hover,
+.terminal-link:focus-visible {
+  color: #b9ffb8;
+  text-shadow:
+    0 0 0.22rem rgba(204, 255, 199, 0.95),
+    0 0 0.8rem rgba(92, 255, 103, 0.75),
+    0.08rem 0 0 rgba(230, 255, 230, 0.28);
+}
+
+.terminal-link:focus-visible {
+  box-shadow: 0 0.18em 0 rgba(185, 255, 184, 0.72);
+}
+
+.terminal-caret {
+  display: inline-block;
+  width: 0.62em;
+  height: 0.92em;
+  margin-left: 0.1em;
+  background: currentColor;
+  box-shadow:
+    0 0 0.22rem rgba(135, 255, 134, 0.9),
+    0 0 0.7rem rgba(59, 255, 78, 0.62);
+  transform: translateY(0.12em);
+  animation: cursor-blink 1.05s steps(1, end) infinite;
+}
+
+.boot-shutter {
+  position: absolute;
+  z-index: 9;
+  inset: 0;
+  pointer-events: none;
+  background: #000;
+  transform-origin: center;
+  animation: boot-shutter 1.32s cubic-bezier(0.2, 0.78, 0.24, 1) forwards;
+}
+
+.boot-shutter::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 0.28rem;
+  opacity: 0;
+  background: rgba(180, 255, 174, 0.92);
+  box-shadow:
+    0 0 1rem rgba(145, 255, 144, 0.82),
+    0 0 4rem rgba(63, 255, 92, 0.44);
+  transform: translateY(-50%);
+  animation: boot-line 1.32s ease-out forwards;
+}
+
+.boot-shutter.is-finished {
+  display: none;
+}
+
+@keyframes phosphor-flicker {
+  0%,
+  100% {
+    filter: brightness(calc(var(--screen-brightness) * 0.99)) saturate(1.08);
+  }
+
+  12% {
+    filter: brightness(calc(var(--screen-brightness) * 1.03)) saturate(1.1);
+  }
+
+  13% {
+    filter: brightness(calc(var(--screen-brightness) * 0.96)) saturate(1.04);
+  }
+
+  32% {
+    filter: brightness(calc(var(--screen-brightness) * 1.01)) saturate(1.08);
+  }
+
+  33% {
+    filter: brightness(calc(var(--screen-brightness) * 0.98)) saturate(1.05);
+  }
+
+  72% {
+    filter: brightness(calc(var(--screen-brightness) * 1.04)) saturate(1.11);
+  }
+}
+
+@keyframes glow-pulse {
+  0%,
+  100% {
+    opacity: 0.68;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.94;
+    transform: scale(1.025);
+  }
+}
+
+@keyframes sheen-drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+
+  50% {
+    transform: translate3d(-1.2%, 0.8%, 0);
+  }
+}
+
+@keyframes vertical-hold {
+  from {
+    transform: translateY(-72%);
+  }
+
+  to {
+    transform: translateY(72%);
+  }
+}
+
+@keyframes scanline-crawl {
+  to {
+    background-position: 0 6px, 4px 0;
+  }
+}
+
+@keyframes cursor-blink {
+  0%,
+  52% {
+    opacity: 1;
+  }
+
+  53%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes boot-shutter {
+  0% {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+
+  16% {
+    opacity: 1;
+    transform: scaleY(0.018);
+  }
+
+  24% {
+    opacity: 0.98;
+    transform: scaleY(0.018);
+  }
+
+  42% {
+    opacity: 0.42;
+    transform: scaleY(1.08);
+  }
+
+  72% {
+    opacity: 0.08;
+  }
+
+  100% {
+    opacity: 0;
+    transform: scaleY(1);
+    visibility: hidden;
+  }
+}
+
+@keyframes boot-line {
+  0%,
+  9% {
+    opacity: 0;
+  }
+
+  16%,
+  28% {
+    opacity: 1;
+  }
+
+  42%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+  }
+
+  .crt-screen {
+    transform: none;
+  }
+}
